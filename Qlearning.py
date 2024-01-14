@@ -46,22 +46,20 @@ class Qlearning:
         print("Training complete.")
 
     def test(self, episodes=10):
-        total_rewards = []
+        total_rewards = 0
+        total_epochs = 0
 
         for episode in range(episodes):
             state, info = self.env.reset()
-            total_reward = 0
-
             terminated = False
             while not terminated:
                 action = self.choose_action(state)
                 state, reward, terminated, _, _ = self.env.step(action)
 
-                total_reward += reward
+                total_rewards += reward
+                total_epochs += 1
 
-            total_rewards.append(total_reward)
-            print(f"Episode {episode + 1}/{episodes}, Total Reward: {total_reward}")
-
-        average_reward = np.mean(total_rewards)
-        print(f"Average Reward over {episodes} episodes: {average_reward}")
+        print(f"Test complete. Results after {episodes} episodes:")
+        print(f"Average number of steps per episode: {total_epochs/episodes}")
+        print(f"Average reward per episode: {total_rewards/episodes}")
 
