@@ -4,9 +4,10 @@ import numpy as np
 
 class QlearningParams:
     def __init__(
-        self, learning_rate: float = 0.1,
-            discount_factor: float = 0.9,
-):
+        self,
+        learning_rate: float = 0.1,
+        discount_factor: float = 0.9,
+    ):
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
 
@@ -17,7 +18,9 @@ class Qlearning:
         self.env = environment
         self.exploration_strategy = exploration_strategy
 
-        self.q_table = np.zeros([environment.observation_space.n, environment.action_space.n])
+        self.q_table = np.zeros(
+            [environment.observation_space.n, environment.action_space.n]
+        )
 
     def choose_action(self, state):
         return self.exploration_strategy(self.env, self.q_table, state)
@@ -32,11 +35,15 @@ class Qlearning:
                 action = self.choose_action(state)
                 next_state, reward, terminated, _, _ = self.env.step(action)
 
-                target = reward + self.params.discount_factor * np.max(self.q_table[next_state])
+                target = reward + self.params.discount_factor * np.max(
+                    self.q_table[next_state]
+                )
                 if terminated:
                     target = reward
 
-                self.q_table[state, action] += self.params.learning_rate * (target - self.q_table[state, action])
+                self.q_table[state, action] += self.params.learning_rate * (
+                    target - self.q_table[state, action]
+                )
 
                 total_reward += reward
                 state = next_state
@@ -62,4 +69,3 @@ class Qlearning:
         print(f"Test complete. Results after {episodes} episodes:")
         print(f"Average number of steps per episode: {total_epochs/episodes}")
         print(f"Average reward per episode: {total_rewards/episodes}")
-
